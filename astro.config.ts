@@ -8,8 +8,7 @@ import netlify from '@astrojs/netlify';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://spooky063.github.io',
-  base: '/meal-planner',
+  output: 'server',
 
   vite: {
     plugins: [tailwindcss()]
