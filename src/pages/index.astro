@@ -1,0 +1,14 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MealPlanner from '../components/preact/MealPlanner.tsx';
+---
+
+<Layout>
+	<main class="container relative mx-auto scroll-my-12 overflow-auto p-2 print:p-12 md:p-16">
+		<h1 class="text-3xl font-bold mb-6">Meal Planner</h1>
+	</main>
+
+	<div>
+		<MealPlanner client:load />
+	</div>
+</Layout>
