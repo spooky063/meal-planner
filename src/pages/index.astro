@@ -1,25 +1,25 @@
 ---
-import Layout from '../layouts/Layout.astro';
-
-import { db, Room } from 'astro:db';
-const rooms = await db.select().from(Room);
-const activeRoomName = Astro.cookies.get('activeRoom')?.value;
+import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
-	<main class="container relative mx-auto scroll-my-12 overflow-auto p-2 print:p-12 md:p-16">
-		<h1 class="text-3xl font-bold mb-6">Meal Planner</h1>
-	</main>
+  <main
+    class="container relative mx-auto scroll-my-12 overflow-auto p-2 print:p-12 md:p-16"
+  >
+    <h1 class="text-3xl font-bold mb-6">Planning des repas</h1>
+  </main>
 
-	<form method="POST" action="/api/rooms/create" class="create-form">
-      <input
-        type="text"
-        name="roomName"
-        placeholder="Nom de la room"
-        required
-        pattern="[a-zA-Z0-9-_]+"
-        title="Lettres, chiffres, tirets et underscores uniquement"
-      >
-      <button type="submit" class="btn btn-secondary">Rejoindre une room</button>
-    </form>
+  <form method="POST" action="/api/rooms/create" class="create-form">
+    <input
+      type="text"
+      name="roomName"
+      placeholder="Nom du planning"
+      required
+      pattern="[a-zA-Z0-9-_]+"
+      title="Lettres, chiffres, tirets et underscores uniquement"
+    />
+    <button type="submit" class="btn btn-secondary"
+      >Rejoindre un planning</button
+    >
+  </form>
 </Layout>

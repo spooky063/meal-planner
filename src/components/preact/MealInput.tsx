@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'preact/hooks';
+import { useState, useEffect, useRef } from 'preact/hooks';
 
 interface MealInputProps {
   roomName: string;
@@ -21,12 +21,23 @@ export default function MealInput({
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saved' | 'error'>('idle');
   const [lastSavedValue, setLastSavedValue] = useState(initialValue);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Mettre à jour la valeur si initialValue change
   useEffect(() => {
     setValue(initialValue);
     setLastSavedValue(initialValue);
   }, [initialValue]);
+
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      // Réinitialiser la hauteur pour calculer la bonne taille
+      textarea.style.height = 'auto';
+      // Définir la hauteur en fonction du contenu
+      textarea.style.height = textarea.scrollHeight + 'px';
+    }
+  }, [value]);
 
   const handleBlur = async () => {
     // Ne sauvegarder que si la valeur a changé
@@ -65,15 +76,16 @@ export default function MealInput({
   };
 
   return (
-    <div class="meal-field">
-      <label for={`${day}-${mealType}`}>
+    <div class="flex flex-col mb-4 gap-1 p-2 bg-bg-muted rounded-lg">
+      <label for={`${day}-${mealType}`} class="border-b border-fg-muted/15">
         {icon} {label}
         {isSaving && <span class="status-indicator saving"> Sauvegarde...</span>}
-        {saveStatus === 'saved' && <span class="status-indicator saved"> ✓ Sauvegardé</span>}
-        {saveStatus === 'error' && <span class="status-indicator error"> ✗ Erreur</span>}
+        {saveStatus === 'saved' && <span class="status-indicator text-fg-accent text-[10px]"> ✓ Sauvegardé</span>}
+        {saveStatus === 'error' && <span class="status-indicator text-fg-danger text-[10px]"> ✗ Erreur</span>}
       </label>
       <textarea
         id={`${day}-${mealType}`}
+        ref={textareaRef}
         value={value}
         onInput={(e) => setValue((e.target as HTMLTextAreaElement).value)}
         onBlur={handleBlur}

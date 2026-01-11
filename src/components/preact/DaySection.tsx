@@ -9,26 +9,30 @@ interface DaySectionProps {
 
 export default function DaySection({ roomName, day, midi, soir }: DaySectionProps) {
   return (
-    <div class="day-section">
-      <h2 class="day-title">{day}</h2>
-      <div class="meal-inputs">
-        <MealInput
-          roomName={roomName}
-          day={day}
-          mealType="midi"
-          initialValue={midi}
-          label="Midi"
-          icon="🌞"
-        />
-        <MealInput
-          roomName={roomName}
-          day={day}
-          mealType="soir"
-          initialValue={soir}
-          label="Soir"
-          icon="🌙"
-        />
+    <>
+      <div class="flex flex-col py-3">
+        <p class="flex flex-col text-xl font-bold mb-2">
+          {day.charAt(0).toUpperCase() + day.slice(1)}
+        </p>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <MealInput
+            roomName={roomName}
+            day={day}
+            mealType="midi"
+            initialValue={midi}
+            label="Midi"
+            icon="🌞"
+          />
+          <MealInput
+            roomName={roomName}
+            day={day}
+            mealType="soir"
+            initialValue={soir}
+            label="Soir"
+            icon="🌙"
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 }

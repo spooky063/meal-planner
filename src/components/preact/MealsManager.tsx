@@ -30,9 +30,10 @@ export default function MealsManager({ roomName }: MealsManagerProps) {
   }
 
   return (
-    <div class="meals-grid">
+    <>
       {days.map(day => {
         const dayMeals = mealsData[day] || { midi: '', soir: '' };
+
         return (
           <DaySection
             key={day}
@@ -43,6 +44,6 @@ export default function MealsManager({ roomName }: MealsManagerProps) {
           />
         );
       })}
-    </div>
+    </>
   );
 }

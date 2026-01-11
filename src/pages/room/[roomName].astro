@@ -1,69 +1,70 @@
 ---
-import { db, Room, Meal, eq } from 'astro:db';
-import Layout from '../../layouts/Layout.astro';
-import DaySection from '../../components/preact/DaySection.tsx';
-import MealsManager from '../../components/preact/MealsManager.tsx';
+import { db, Room, eq } from "astro:db";
+import Layout from "../../layouts/Layout.astro";
+import MealsManager from "../../components/preact/MealsManager.tsx";
 
 const { roomName } = Astro.params;
 
-// Vérifier que la room existe
 const room = await db.select().from(Room).where(eq(Room.name, roomName!)).get();
 
 if (!room) {
-  return Astro.redirect('/');
+  return Astro.redirect("/");
 }
 
-Astro.cookies.set('activeRoom', roomName!, {
-  path: '/',
-  maxAge: 60 * 60 * 24 * 30 // 30 jours
+Astro.cookies.set("activeRoom", roomName!, {
+  path: "/",
+  maxAge: 60 * 60 * 24 * 30, // 30 jours
 });
 ---
 
 <Layout>
-    <main class="container relative mx-auto scroll-my-12 overflow-auto p-2 print:p-12 md:p-16">
-		<div class="header">
-            <h1>🍽️ Room: {roomName}</h1>
-            <div class="actions">
-                <button id="clearBtn" class="btn btn-danger">Tout effacer</button>
-                <a href="/" class="btn btn-secondary">Quitter la room</a>
-            </div>
+  <main
+    class="container relative mx-auto scroll-my-12 overflow-auto p-2 print:p-12 md:p-16"
+  >
+    <header class="flex justify-between items-center">
+        <h1 class="text-3xl font-bold mb-6">🍽️ Planning: {roomName}</h1>
+
+        <div
+        class="flex gap-3 flex-wrap mb-4 *:text-xs *:rounded-md *:py-1 *:px-2 *:border *:border-border-default"
+        >
+            <button id="clearBtn" class="cursor-pointer bg-bg-muted text-fg-danger">Tout effacer</button>
+            <a href="/" class="btn btn-secondary">Quitter le planning</a>
         </div>
+    </header>
 
-        <div class="meals-grid" id="meals-container"></div>
+    <div class="grid">
+      <MealsManager roomName={roomName!} client:load />
+    </div>
+  </main>
 
-        <div class="meals-grid">
-            <MealsManager
-                roomName={roomName!}
-                client:load
-            />
-        </div>
-	</main>
+  <script define:vars={{ roomName }}>
+    const clearBtn = document.getElementById("clearBtn");
 
-    <script define:vars={{ roomName }}>
-        const clearBtn = document.getElementById('clearBtn');
+    // Clear all meals
+    clearBtn.addEventListener("click", async () => {
+      if (
+        !confirm(
+          "Êtes-vous sûr de vouloir effacer tous les menus de cette room ?"
+        )
+      ) {
+        return;
+      }
 
-        // Clear all meals
-        clearBtn.addEventListener('click', async () => {
-            if (!confirm('Êtes-vous sûr de vouloir effacer tous les menus de cette room ?')) {
-                return;
-            }
-
-            try {
-                const response = await fetch('/api/meals/clear', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ roomName })
-                });
-
-                if (response.ok) {
-                    // Recharger la page pour vider tous les champs
-                    window.location.reload();
-                }
-            } catch (error) {
-                console.error('Erreur lors du nettoyage:', error);
-            }
+      try {
+        const response = await fetch("/api/meals/clear", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ roomName }),
         });
-    </script>
+
+        if (response.ok) {
+          window.location.reload();
+        }
+      } catch (error) {
+        console.error("Erreur lors du nettoyage:", error);
+      }
+    });
+  </script>
 </Layout>
