@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "astro dev --host",
-    "build": "astro build",
+    "build": "astro build --remote",
     "preview": "astro preview --host",
     "astro": "astro",
     "test": "vitest"

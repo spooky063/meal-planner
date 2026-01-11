@@ -1,6 +1,3 @@
 [build]
   command = "yarn run build"
   publish = "dist"
-
-[build.environment]
-  ASTRO_DATABASE_FILE = "data/db.sqlite"
