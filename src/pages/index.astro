@@ -1,6 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import MealPlanner from '../components/preact/MealPlanner.tsx';
+
+import { db, Room } from 'astro:db';
+const rooms = await db.select().from(Room);
+const activeRoomName = Astro.cookies.get('activeRoom')?.value;
 ---
 
 <Layout>
@@ -8,7 +11,15 @@ import MealPlanner from '../components/preact/MealPlanner.tsx';
 		<h1 class="text-3xl font-bold mb-6">Meal Planner</h1>
 	</main>
 
-	<div>
-		<MealPlanner client:load />
-	</div>
+	<form method="POST" action="/api/rooms/create" class="create-form">
+      <input
+        type="text"
+        name="roomName"
+        placeholder="Nom de la room"
+        required
+        pattern="[a-zA-Z0-9-_]+"
+        title="Lettres, chiffres, tirets et underscores uniquement"
+      >
+      <button type="submit" class="btn btn-secondary">Rejoindre une room</button>
+    </form>
 </Layout>

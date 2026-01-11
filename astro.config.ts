@@ -6,6 +6,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 import netlify from '@astrojs/netlify';
 
+import db from '@astrojs/db';
+
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
@@ -15,9 +17,8 @@ export default defineConfig({
   },
 
   integrations: [
-    preact({
-      include: ['**/preact/*'],
-    }),
+    preact({ include: ['**/preact/*'] }),
+    db()
   ],
 
   adapter: netlify(),

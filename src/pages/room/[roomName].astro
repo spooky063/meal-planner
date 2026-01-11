@@ -1,0 +1,69 @@
+---
+import { db, Room, Meal, eq } from 'astro:db';
+import Layout from '../../layouts/Layout.astro';
+import DaySection from '../../components/preact/DaySection.tsx';
+import MealsManager from '../../components/preact/MealsManager.tsx';
+
+const { roomName } = Astro.params;
+
+// Vérifier que la room existe
+const room = await db.select().from(Room).where(eq(Room.name, roomName!)).get();
+
+if (!room) {
+  return Astro.redirect('/');
+}
+
+Astro.cookies.set('activeRoom', roomName!, {
+  path: '/',
+  maxAge: 60 * 60 * 24 * 30 // 30 jours
+});
+---
+
+<Layout>
+    <main class="container relative mx-auto scroll-my-12 overflow-auto p-2 print:p-12 md:p-16">
+		<div class="header">
+            <h1>🍽️ Room: {roomName}</h1>
+            <div class="actions">
+                <button id="clearBtn" class="btn btn-danger">Tout effacer</button>
+                <a href="/" class="btn btn-secondary">Quitter la room</a>
+            </div>
+        </div>
+
+        <div class="meals-grid" id="meals-container"></div>
+
+        <div class="meals-grid">
+            <MealsManager
+                roomName={roomName!}
+                client:load
+            />
+        </div>
+	</main>
+
+    <script define:vars={{ roomName }}>
+        const clearBtn = document.getElementById('clearBtn');
+
+        // Clear all meals
+        clearBtn.addEventListener('click', async () => {
+            if (!confirm('Êtes-vous sûr de vouloir effacer tous les menus de cette room ?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/meals/clear', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ roomName })
+                });
+
+                if (response.ok) {
+                    // Recharger la page pour vider tous les champs
+                    window.location.reload();
+                }
+            } catch (error) {
+                console.error('Erreur lors du nettoyage:', error);
+            }
+        });
+    </script>
+</Layout>
