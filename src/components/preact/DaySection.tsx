@@ -10,11 +10,11 @@ interface DaySectionProps {
 export default function DaySection({ roomName, day, midi, soir }: DaySectionProps) {
   return (
     <>
-      <div class="flex flex-col py-3">
-        <p class="flex flex-col text-xl font-bold mb-2">
+      <div class="flex flex-col py-2">
+        <p class="flex flex-col text-xl font-medium mb-2">
           {day.charAt(0).toUpperCase() + day.slice(1)}
         </p>
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div class="grid grid-cols-1 gap-2 md:grid-cols-2">
           <MealInput
             roomName={roomName}
             day={day}

@@ -21,11 +21,11 @@ Astro.cookies.set("activeRoom", roomName!, {
   <main
     class="container relative mx-auto scroll-my-12 overflow-auto p-2 print:p-12 md:p-16"
   >
-    <header class="flex justify-between items-center">
+    <header class="grid grid-cols-1 md:grid-cols-2 items-center">
         <h1 class="text-3xl font-bold mb-6">🍽️ Planning: {roomName}</h1>
 
         <div
-        class="flex gap-3 flex-wrap mb-4 *:text-xs *:rounded-md *:py-1 *:px-2 *:border *:border-border-default"
+        class="flex gap-3 flex-wrap mb-4 *:text-xs *:rounded-md *:py-1 *:px-2 *:border *:border-border-default md:justify-end"
         >
             <button id="clearBtn" class="cursor-pointer bg-bg-muted text-fg-danger">Tout effacer</button>
             <a href="/" class="btn btn-secondary">Quitter le planning</a>

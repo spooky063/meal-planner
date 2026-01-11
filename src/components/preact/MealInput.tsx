@@ -76,8 +76,8 @@ export default function MealInput({
   };
 
   return (
-    <div class="flex flex-col mb-4 gap-1 p-2 bg-bg-muted rounded-lg">
-      <label for={`${day}-${mealType}`} class="border-b border-fg-muted/15">
+    <div class="flex flex-col mb-2 gap-1 p-2 bg-bg-muted rounded-lg">
+      <label for={`${day}-${mealType}`} class="font-medium border-b border-fg-muted/15">
         {icon} {label}
         {isSaving && <span class="status-indicator saving"> Sauvegarde...</span>}
         {saveStatus === 'saved' && <span class="status-indicator text-fg-accent text-[10px]"> ✓ Sauvegardé</span>}
